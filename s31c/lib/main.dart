@@ -1,34 +1,58 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:seminar_1/styled_text.dart';
 
 void main() {
-  runApp(
-    const MaterialApp(
-      home: Scaffold(
-        body: GradientScreen(),
-      ),
-    ),
-  );
+  runApp(const DiceApp());
 }
 
-class GradientScreen extends StatelessWidget {
-  const GradientScreen({super.key});
+class DiceApp extends StatelessWidget {
+  const DiceApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF4A148C),
-            Color(0xFF1976D2),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: DiceRoller(),
       ),
-      child: const Center(
-        child: StyledText('Hello Gradient!', bold: true),
+    );
+  }
+}
+
+class DiceRoller extends StatefulWidget {
+  const DiceRoller({super.key});
+
+  @override
+  State<DiceRoller> createState() => _DiceRollerState();
+}
+
+class _DiceRollerState extends State<DiceRoller> {
+  final randomizer = Random();
+  var currentDiceValue = 1;
+
+  void rollDice() {
+    setState(() {
+      currentDiceValue = randomizer.nextInt(6) + 1;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            'assets/dice-$currentDiceValue.png',
+            width: 200,
+          ),
+          const SizedBox(height: 32),
+          ElevatedButton(
+            onPressed: rollDice,
+            child: const Text('Roll Dice'),
+          ),
+        ],
       ),
     );
   }
